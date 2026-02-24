@@ -27,12 +27,12 @@ def permisos_sh():
 def procces_file():
     
 
-    with open("permisos.json" , "r") as f:
+    with open("json/permisos.json" , "r") as f:
         files_list = json.load(f) # Cargamos Json ahora es un diccionario
         
     
 
-    with open("white_list_perm.json" , "r") as f:
+    with open("json/white_list_perm.json" , "r") as f:
         white_list = json.load(f) # Cargamos Json ahora es un diccionario
     return files_list , white_list # Diccionarios
     

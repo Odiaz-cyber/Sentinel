@@ -23,4 +23,4 @@ function permisos(){
     echo "}" # Cerrar Json
 }
 
-permisos > permisos.json
+permisos > json/permisos.json

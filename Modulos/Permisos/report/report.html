@@ -1,37 +1,4 @@
-#/usr/bin/python3 
-from reportlab.lib.pagesizes import letter
-from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
-class Report:
-    def __init__(self, document , result_list):
-        self.document = document
-        self.result_list = result_list
-        
-
-    # PDF   
-    def report(self):
-        if self.document == "pdf":
-            doc = SimpleDocTemplate("report/report.pdf" , pagesize=letter)
-
-            table = Table(self.result_list)
-            table.setStyle(TableStyle([
-                ("BACKGROUND", (0,0), (-1,0), colors.grey),
-                ("TEXTCOLOR", (0,0), (-1,0), colors.whitesmoke),
-                ("ALIGN", (0,0), (-1,-1), "CENTER"),
-                ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
-                ("BOTTOMPADDING", (0,0), (-1,0), 12),
-                ("GRID", (0,0), (-1,-1), 1, colors.black),
-                ("TEXTCOLOR", (1,2), (1,2), colors.green),   # Secure en verde
-                ("TEXTCOLOR", (1,1), (1,1), colors.red),     # Insecure en rojo
-            ]))
-
-            elements = [table]
-            doc.build(elements)
-        
-        # HTML
-        elif self.document == "html":
-            html_content = """
             <!DOCTYPE html>
             <html lang="es">
             <head>
@@ -137,29 +104,7 @@ class Report:
                     </div>
                 </header>
                 <table>
-            """
-
-            # primera fila como encabezado
-            headers = self.result_list[0]
-            html_content += "<tr>" + "".join(f"<th>{h}</th>" for h in headers) + "</tr>"
-
-            # resto de filas
-            for row in self.result_list[1:]:
-                archivo = row[0]
-                estado = row[1]
-                detalle = row[2] if len(row) > 2 else ""
-
-                # asignar clase según estado
-                if "Recomended" in estado:
-                    estado_class = "secure"
-                elif "Insecure" in estado:
-                    estado_class = "insecure"
-                else:
-                    estado_class = "unknown"
-
-                html_content += f"<tr><td>{archivo}</td><td class='{estado_class}'>{estado}</td><td>{detalle}</td></tr>"
-
-            html_content += """
+            <tr><th>Security</th><th>Files</th><th>Recomended</th></tr><tr><td>Permits not recommended</td><td class='unknown'>/etc/passwd</td><td>-rw-r--r--	odiaz	root</td></tr><tr><td>Permits Recomended</td><td class='unknown'>/etc/hosts</td><td></td></tr><tr><td>Permits not recommended</td><td class='unknown'>/etc/group</td><td>-rw-rw--r--	root	root</td></tr><tr><td>Permits Recomended</td><td class='unknown'>/etc/shadow</td><td></td></tr><tr><td>Permits not recommended</td><td class='unknown'>/usr/bin/python3</td><td>-rw-r-----	root	root</td></tr><tr><td>Permits Recomended</td><td class='unknown'>/usr/bin/trust</td><td></td></tr>
                 </table>
                 <footer>
                     Generado automáticamente por SentinelLinux - Auditoría de Seguridad<br>
@@ -167,7 +112,4 @@ class Report:
                 </footer>
             </body>
             </html>
-            """
-
-            with open("report/report.html", "w") as f:
-                f.write(html_content)
+            
