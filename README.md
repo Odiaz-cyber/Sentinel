@@ -22,7 +22,7 @@ input → extracción → comparación → reporte
 ## Objetivo general
 Desarrollar un framework modular orientado a la auditoría de seguridad en sistemas Linux, capaz de automatizar la identificación de vulnerabilidades, configuraciones inseguras y permisos inadecuados, ofreciendo reportes claros y personalizables para apoyar la gestión de la seguridad informática.
 
-*(Se evita repetir “diseñar” e “implementar”, pero se mantiene el sentido académico y técnico.)*
+
 
 ---
 
