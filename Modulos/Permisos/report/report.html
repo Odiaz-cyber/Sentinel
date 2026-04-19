@@ -2,114 +2,71 @@
             <!DOCTYPE html>
             <html lang="es">
             <head>
-                <meta charset="UTF-8">
-                <title>Reporte de Auditoría</title>
-                <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-                    body {
-                        font-family: 'Roboto', sans-serif;
-                        background: linear-gradient(180deg, #1c1c1c, #121212);
-                        margin: 0;
-                        padding: 0;
-                        color: #e0e0e0;
+            <meta charset="UTF-8">
+            <title>Reporte SentinelLinux</title>
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+            <style>
+                body { font-family:'Inter',sans-serif; background:#f5f6fa; color:#2f3640; margin:0; padding:0; }
+                header { background:linear-gradient(90deg,#1abc9c,#16a085); padding:20px 40px; color:#fff; display:flex; align-items:center; }
+                header img { width:70px; margin-right:20px; }
+                header h1 { margin:0;font-size:24px;font-weight:700; }
+                header h2 { margin:5px 0 0 0;font-weight:400;font-size:14px;color:#dff9fb; }
+                #searchBox { width:50%; margin:20px auto; display:block; padding:10px; border-radius:6px; border:1px solid #dcdde1; font-size:14px; }
+                .summary .bar { height:25px; line-height:25px; color:white; margin-bottom:5px; border-radius:4px; padding-left:8px; }
+                .summary .secure { background-color:#44bd32; }
+                .summary .insecure { background-color:#e84118; }
+                .summary .unknown { background-color:#fbc531; color:#2f3640; }
+                table { width:90%; margin:20px auto; border-collapse:collapse; box-shadow:0 4px 8px rgba(0,0,0,0.1); }
+                th, td { padding:12px 15px; text-align:center; border-bottom:1px solid #dcdde1; }
+                th { background-color:#273c75; color:#f5f6fa; font-weight:600; }
+                tr:nth-child(even) { background-color:#f1f2f6; }
+                tr:hover { background-color:#dcdde1; }
+                .badge { padding:5px 10px; border-radius:12px; font-size:13px; font-weight:500; color:#fff; }
+                .secure { background-color:#44bd32; }
+                .insecure { background-color:#e84118; }
+                .unknown { background-color:#fbc531; color:#2f3640; }
+                .status-dot { display:inline-block; width:12px; height:12px; border-radius:50%; margin-right:6px; }
+                .green { background-color:#44bd32; }
+                .red { background-color:#e84118; }
+                .orange { background-color:#fbc531; }
+                footer { text-align:center; padding:20px; font-size:13px; color:#7f8fa6; border-top:1px solid #dcdde1; }
+            </style>
+            <script>
+                function searchTable() {
+                    var input = document.getElementById("searchBox");
+                    var filter = input.value.toLowerCase();
+                    var table = document.getElementById("auditTable");
+                    var trs = table.getElementsByTagName("tr");
+                    for(var i=1;i<trs.length;i++) {
+                        var tds = trs[i].getElementsByTagName("td");
+                        var show=false;
+                        for(var j=0;j<tds.length;j++) {
+                            if(tds[j].innerText.toLowerCase().indexOf(filter) > -1) { show=true; break; }
+                        }
+                        trs[i].style.display = show ? "" : "none";
                     }
-                    header {
-                        display: flex;
-                        align-items: center;
-                        justify-content: flex-start;
-                        background: linear-gradient(135deg, #2e7d32, #1b5e20);
-                        padding: 25px 40px;
-                        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
-                    }
-                    header img {
-                        width: 80px;
-                        height: 80px;
-                        margin-right: 25px;
-                    }
-                    header div {
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    header h1 {
-                        font-size: 28px;
-                        margin: 0;
-                        color: white;
-                        font-weight: 700;
-                        letter-spacing: 0.5px;
-                    }
-                    header h2 {
-                        font-size: 14px;
-                        margin: 5px 0 0 0;
-                        color: #c8e6c9;
-                        font-weight: 400;
-                    }
-                    table {
-                        width: 90%;
-                        margin: 40px auto;
-                        border-collapse: collapse;
-                        background-color: #1e1e1e;
-                        border-radius: 10px;
-                        overflow: hidden;
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
-                    }
-                    th, td {
-                        padding: 14px 18px;
-                        text-align: center;
-                        border-bottom: 1px solid #333;
-                        transition: background-color 0.3s ease, color 0.3s ease;
-                    }
-                    th {
-                        background-color: #2c2c2c;
-                        font-weight: 700;
-                        text-transform: uppercase;
-                        letter-spacing: 0.05em;
-                        color: #81c784;
-                    }
-                    tr:nth-child(even) {
-                        background-color: #1a1a1a;
-                    }
-                    tr:hover {
-                        background-color: #333333;
-                        color: #ffffff;
-                    }
-                    .secure {
-                        color: #43a047;
-                        font-weight: bold;
-                    }
-                    .insecure {
-                        color: #c62828;
-                        font-weight: bold;
-                    }
-                    .unknown {
-                        color: #f57c00;
-                        font-weight: bold;
-                    }
-                    footer {
-                        text-align: center;
-                        padding: 20px;
-                        font-size: 13px;
-                        color: #aaa;
-                        background-color: #1b1b1b;
-                        border-top: 1px solid #333;
-                    }
-                </style>
+                }
+            </script>
             </head>
             <body>
-                <header>
-                    <img src="../recursos/sentinel_rotado.png" alt="Logo SentinelLinux">
-                    <div>
-                        <h1>SentinelLinux - Reporte de Auditoría de Permisos</h1>
-                        <h2>Auditoría de seguridad según estándares ISO27001 / PCI-DSS</h2>
-                    </div>
-                </header>
-                <table>
-            <tr><th>Security</th><th>Files</th><th>Recomended</th></tr><tr><td>Permits not recommended</td><td class='unknown'>/etc/passwd</td><td>-rw-r--r--	odiaz	root</td></tr><tr><td>Permits Recomended</td><td class='unknown'>/etc/hosts</td><td></td></tr><tr><td>Permits not recommended</td><td class='unknown'>/etc/group</td><td>-rw-rw--r--	root	root</td></tr><tr><td>Permits Recomended</td><td class='unknown'>/etc/shadow</td><td></td></tr><tr><td>Permits not recommended</td><td class='unknown'>/usr/bin/python3</td><td>-rw-r-----	root	root</td></tr><tr><td>Permits Recomended</td><td class='unknown'>/usr/bin/trust</td><td></td></tr>
-                </table>
-                <footer>
-                    Generado automáticamente por SentinelLinux - Auditoría de Seguridad<br>
-                    Fecha de generación: <script>document.write(new Date().toLocaleString());</script>
-                </footer>
+            <header>
+                <img src="recursos/sentinel_blanco.png" alt="Logo SentinelLinux">
+                <div><h1>SentinelLinux - Reporte de Auditoría</h1>
+                <h2>Auditoría ISO27001 / CIS</h2></div>
+            </header>
+            <div class="summary">
+                <h3>Resumen de resultados</h3>
+                <div class="bar secure" style="width:0%">✔️ 0 seguros</div>
+                <div class="bar insecure" style="width:0%">⚠️ 0 inseguros</div>
+                <div class="bar unknown" style="width:100%">❓ 6 desconocidos</div>
+            </div>
+            <input type="text" id="searchBox" onkeyup="searchTable()" placeholder="Buscar por archivo, permisos o estado...">
+            <table id="auditTable">
+            <tr><th>Security</th><th>Recomended</th><th>Files</th></tr><tr><td>Permits Recomended</td><td></td><td><span class='status-dot orange'></span><span class='badge unknown'>❓ /etc/passwd</span></td></tr><tr><td>Permits Recomended</td><td></td><td><span class='status-dot orange'></span><span class='badge unknown'>❓ /etc/hosts</span></td></tr><tr><td>Permits Recomended</td><td></td><td><span class='status-dot orange'></span><span class='badge unknown'>❓ /usr/bin/python3</span></td></tr><tr><td>Permits Recomended</td><td></td><td><span class='status-dot orange'></span><span class='badge unknown'>❓ /etc/shadow</span></td></tr><tr><td>Permits Recomended</td><td></td><td><span class='status-dot orange'></span><span class='badge unknown'>❓ /etc/group</span></td></tr><tr><td>Permits not recommended</td><td>root	-rwxr-xr-x	odiaz</td><td><span class='status-dot orange'></span><span class='badge unknown'>❓ /usr/bin/trust</span></td></tr>
+            </table>
+            <footer>
+                Generado automáticamente por SentinelLinux - 2026-04-06 15:23:33
+            </footer>
             </body>
             </html>
             

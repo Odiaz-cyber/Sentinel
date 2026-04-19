@@ -1,0 +1,5 @@
+Para ralizar esta seccion debo:
+
+1.Recolectar que binario tienen permisos sgid 
+2.Que grupo es propietario de dicho binario
+3.Lista que conetanga binarios peligrosos  que tengan como grupo priveligiados

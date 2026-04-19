@@ -1,0 +1,4 @@
+El archivo ls-lR.gz es un índice comprimido que los repositorios oficiales de Debian publican.
+ Contiene un listado completo de todos los archivos distribuidos en los paquetes, 
+incluyendo sus permisos. 
+Es la forma más cercana a una “lista oficial” de binarios con SUID, porque puedes filtrar directamente desde ahí.

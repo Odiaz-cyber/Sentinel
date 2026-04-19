@@ -1,0 +1,10 @@
+/usr/bin/passwd
+/bin/su
+/usr/bin/sudo
+/bin/ping
+/bin/mount
+/bin/umount
+/usr/bin/chsh
+/usr/bin/chfn
+/usr/bin/newgrp
+/usr/bin/gpasswd

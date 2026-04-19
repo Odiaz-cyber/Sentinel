@@ -1,0 +1,8 @@
+{
+ "/etc/passwd": { "permiso": "-rw-r--r--", "propietario": "root", "grupo": "root" },
+ "/etc/hosts": { "permiso": "-rw-r--r--", "propietario": "root", "grupo": "root" },
+ "/usr/bin/python3": { "permiso": "lrwxrwxrwx", "propietario": "root", "grupo": "root" },
+ "/etc/shadow": { "permiso": "-rw-r-----", "propietario": "root", "grupo": "shadow" },
+ "/etc/group": { "permiso": "-rw-r--r--", "propietario": "root", "grupo": "root" },
+ "/usr/bin/trust": { "permiso": "-rwxr-xr-x", "propietario": "root", "grupo": "root" }
+}

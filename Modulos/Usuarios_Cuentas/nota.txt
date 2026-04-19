@@ -1,0 +1,83 @@
+Muy bien, para auditar la seguridad de usuarios y cuentas en Linux conviene estructurar el análisis en capas. No basta con mirar /home, sino que hay que revisar configuraciones, privilegios y políticas. Aquí te dejo un checklist modular que puedes aplicar en tu herramienta de auditoría:
+1. Inventario de cuentas
+
+    Listar todas las cuentas:
+    bash
+
+    getent passwd | cut -d: -f1
+
+    Clasificar:
+
+        Usuarios humanos (con home en /home).
+
+        Usuarios de servicio (ej. mysql, www-data, daemon).
+
+2. Shell asignada
+
+    Verificar que los usuarios de servicio tengan shell restringida: /usr/sbin/nologin o /bin/false.
+    bash
+
+    awk -F: '{print $1,$7}' /etc/passwd
+
+    Alertar si algún usuario de servicio tiene /bin/bash o /bin/sh.
+
+3. Grupos y privilegios
+
+    Revisar pertenencia a grupos:
+    bash
+
+    id usuario
+
+    Detectar usuarios en grupos críticos (sudo, wheel, adm).
+
+    Asegurar que los usuarios de servicio no estén en grupos innecesarios.
+
+4. Permisos de directorios
+
+    Auditar permisos de home:
+    bash
+
+    ls -ld /home/* /root /var/lib/mysql /var/www
+
+    Verificar que solo el propietario tenga acceso de escritura.
+
+    Revisar que servicios no tengan acceso a directorios sensibles.
+
+5. Políticas de autenticación
+
+    Revisar configuración de PAM y contraseñas en /etc/shadow.
+
+    Detectar contraseñas vacías o cuentas bloqueadas.
+
+    Comprobar caducidad de contraseñas:
+    bash
+
+    chage -l usuario
+
+6. Sesiones activas
+
+    Comprobar usuarios conectados:
+    bash
+
+    who
+    w
+    users
+
+    Revisar procesos activos por usuario:
+    bash
+
+    ps -u usuario
+
+7. Alertas específicas
+
+    Usuarios con UID 0 distintos de root.
+
+    Cuentas sin contraseña o con contraseña débil.
+
+    Servicios expuestos con privilegios excesivos.
+
+
+    Tu auditoría debe distinguir entre usuarios humanos y usuarios de servicio, 
+    verificando que los primeros tengan configuraciones seguras y 
+    los segundos estén restringidos al mínimo necesario. El riesgo no está en la cuenta en sí,
+     sino en el servicio que corre bajo ella y en los privilegios que se le otorguen.

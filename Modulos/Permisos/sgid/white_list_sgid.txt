@@ -1,0 +1,7 @@
+/usr/bin/chage
+/usr/bin/expiry
+/usr/bin/dotlockfile
+/usr/bin/crontab
+/usr/bin/ssh-agent
+/usr/bin/plocate
+/usr/sbin/unix_chkpwd

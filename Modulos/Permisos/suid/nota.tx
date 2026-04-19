@@ -1,0 +1,4 @@
+Tu enfoque es correcto y útil como primera capa de seguridad. 
+Lo que te recomiendo es cambiar de lista negra a lista blanca, para evitar falsos positivos 
+y proteger binarios legítimos. Además, nunca elimines permisos automáticamente: 
+reporta primero y deja la decisión al administrador.5

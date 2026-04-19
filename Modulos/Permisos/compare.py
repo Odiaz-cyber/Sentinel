@@ -9,25 +9,27 @@ class Compare:
     def __init__(self , files_list , white_list ):
         self.files_list = files_list 
         self.white_list = white_list
-        self.result_list = [["Security" , "Files" , "Recomended"]]
+        self.result_list = [["Security" ,  "Recomended", "Files"]]
         self.list_perm =[]
         
     def comparador(self):
         
         for key , value in self.files_list.items():
-            if key in self.white_list:
-                if value == self.white_list[key]:
-                    self.result_list.append(["Permits Recomended" , key])
-                    
-                else:
-                    for key2 , value in self.white_list[key].items():
-                        
-                        self.list_perm.append(value)
+            try:
+                if key in self.white_list:
+                    if value == self.white_list[key]:
+                        self.result_list.append(["Permits Recomended" , key])
 
-                        if len(self.list_perm) == 3:
-                            self.result_list.append(["Permits not recommended" , key ,"\t".join(self.list_perm)])
-                            self.list_perm = []
-                   
+                    else:
+                        for key2 , value in self.white_list[key].items():
+
+                            self.list_perm.append(value)
+
+                            if len(self.list_perm) == 3:
+                                self.result_list.append(["Permits not recommended" , key ,"\t".join(self.list_perm)])
+                                self.list_perm = []
+            except:
+                pass       
 
         return self.result_list
     

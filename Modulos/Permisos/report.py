@@ -1,163 +1,192 @@
-#/usr/bin/python3 
+#/usr/bin/python3
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 
 class Report:
-    def __init__(self, document , result_list):
+    def __init__(self, document, result_list):
         self.document = document
         self.result_list = result_list
-        
 
-    # PDF   
     def report(self):
         if self.document == "pdf":
-            doc = SimpleDocTemplate("report/report.pdf" , pagesize=letter)
-
+            # Crear PDF
+            doc = SimpleDocTemplate("report/report.pdf", pagesize=letter)
+            
             table = Table(self.result_list)
+            
+            # Estilo base
             table.setStyle(TableStyle([
-                ("BACKGROUND", (0,0), (-1,0), colors.grey),
+                ("BACKGROUND", (0,0), (-1,0), colors.HexColor("#273c75")),  # encabezado azul oscuro
                 ("TEXTCOLOR", (0,0), (-1,0), colors.whitesmoke),
                 ("ALIGN", (0,0), (-1,-1), "CENTER"),
                 ("FONTNAME", (0,0), (-1,0), "Helvetica-Bold"),
+                ("FONTSIZE", (0,0), (-1,0), 12),
                 ("BOTTOMPADDING", (0,0), (-1,0), 12),
-                ("GRID", (0,0), (-1,-1), 1, colors.black),
-                ("TEXTCOLOR", (1,2), (1,2), colors.green),   # Secure en verde
-                ("TEXTCOLOR", (1,1), (1,1), colors.red),     # Insecure en rojo
+                ("GRID", (0,0), (-1,-1), 0.5, colors.HexColor("#7f8c8d")),
             ]))
-
+            
+            # Filas alternadas
+            for i in range(1, len(self.result_list)):
+                bg_color = colors.HexColor("#f1f2f6") if i % 2 == 0 else colors.HexColor("#ffffff")
+                table.setStyle(TableStyle([("BACKGROUND", (0,i), (-1,i), bg_color)]))
+            
+            # Colores de estado
+            for i, row in enumerate(self.result_list[1:], start=1):
+                estado = row[1]
+                if "Recomended" in estado:
+                    table.setStyle(TableStyle([("TEXTCOLOR", (1,i), (1,i), colors.green)]))
+                elif "Insecure" in estado:
+                    table.setStyle(TableStyle([("TEXTCOLOR", (1,i), (1,i), colors.red)]))
+            
             elements = [table]
             doc.build(elements)
-        
-        # HTML
+
         elif self.document == "html":
+            # HTML moderno
             html_content = """
             <!DOCTYPE html>
             <html lang="es">
             <head>
                 <meta charset="UTF-8">
                 <title>Reporte de Auditoría</title>
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
                 <style>
-                    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
                     body {
-                        font-family: 'Roboto', sans-serif;
-                        background: linear-gradient(180deg, #1c1c1c, #121212);
+                        font-family: 'Inter', sans-serif;
+                        background-color: #f5f6fa;
+                        color: #2f3640;
                         margin: 0;
                         padding: 0;
-                        color: #e0e0e0;
                     }
                     header {
+                        background: linear-gradient(90deg, #1abc9c, #16a085);
+                        padding: 20px 40px;
+                        color: #fff;
                         display: flex;
                         align-items: center;
-                        justify-content: flex-start;
-                        background: linear-gradient(135deg, #2e7d32, #1b5e20);
-                        padding: 25px 40px;
-                        box-shadow: 0 4px 10px rgba(0,0,0,0.5);
                     }
                     header img {
-                        width: 80px;
-                        height: 80px;
-                        margin-right: 25px;
+                        width: 70px;
+                        margin-right: 20px;
                     }
-                    header div {
-                        display: flex;
-                        flex-direction: column;
-                    }
-                    header h1 {
-                        font-size: 28px;
-                        margin: 0;
-                        color: white;
-                        font-weight: 700;
-                        letter-spacing: 0.5px;
-                    }
-                    header h2 {
+                    header h1 { margin: 0; font-size: 24px; font-weight: 700; }
+                    header h2 { margin: 5px 0 0 0; font-weight: 400; font-size: 14px; color: #dff9fb; }
+                    #searchBox {
+                        width: 50%;
+                        margin: 20px auto;
+                        display: block;
+                        padding: 10px;
+                        border-radius: 6px;
+                        border: 1px solid #dcdde1;
                         font-size: 14px;
-                        margin: 5px 0 0 0;
-                        color: #c8e6c9;
-                        font-weight: 400;
                     }
                     table {
                         width: 90%;
-                        margin: 40px auto;
+                        margin: 20px auto;
                         border-collapse: collapse;
-                        background-color: #1e1e1e;
-                        border-radius: 10px;
-                        overflow: hidden;
-                        box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+                        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
                     }
                     th, td {
-                        padding: 14px 18px;
+                        padding: 12px 15px;
                         text-align: center;
-                        border-bottom: 1px solid #333;
-                        transition: background-color 0.3s ease, color 0.3s ease;
+                        border-bottom: 1px solid #dcdde1;
                     }
                     th {
-                        background-color: #2c2c2c;
-                        font-weight: 700;
-                        text-transform: uppercase;
-                        letter-spacing: 0.05em;
-                        color: #81c784;
+                        background-color: #273c75;
+                        color: #f5f6fa;
+                        font-weight: 600;
                     }
-                    tr:nth-child(even) {
-                        background-color: #1a1a1a;
+                    tr:nth-child(even) { background-color: #f1f2f6; }
+                    tr:hover { background-color: #dcdde1; }
+                    .badge {
+                        padding: 5px 10px;
+                        border-radius: 12px;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: #fff;
                     }
-                    tr:hover {
-                        background-color: #333333;
-                        color: #ffffff;
+                    .secure { background-color: #44bd32; }
+                    .insecure { background-color: #e84118; }
+                    .unknown { background-color: #fbc531; color: #2f3640; }
+                    .status-dot {
+                        display: inline-block;
+                        width: 12px;
+                        height: 12px;
+                        border-radius: 50%;
+                        margin-right: 6px;
                     }
-                    .secure {
-                        color: #43a047;
-                        font-weight: bold;
-                    }
-                    .insecure {
-                        color: #c62828;
-                        font-weight: bold;
-                    }
-                    .unknown {
-                        color: #f57c00;
-                        font-weight: bold;
-                    }
+                    .green { background-color: #44bd32; }
+                    .red { background-color: #e84118; }
+                    .orange { background-color: #fbc531; }
                     footer {
                         text-align: center;
                         padding: 20px;
                         font-size: 13px;
-                        color: #aaa;
-                        background-color: #1b1b1b;
-                        border-top: 1px solid #333;
+                        color: #7f8fa6;
+                        border-top: 1px solid #dcdde1;
                     }
                 </style>
+                <script>
+                    function searchTable() {
+                        var input = document.getElementById("searchBox");
+                        var filter = input.value.toLowerCase();
+                        var table = document.getElementById("auditTable");
+                        var trs = table.getElementsByTagName("tr");
+                        for (var i = 1; i < trs.length; i++) {
+                            var tds = trs[i].getElementsByTagName("td");
+                            var show = false;
+                            for (var j = 0; j < tds.length; j++) {
+                                if (tds[j].innerText.toLowerCase().indexOf(filter) > -1) {
+                                    show = true;
+                                    break;
+                                }
+                            }
+                            trs[i].style.display = show ? "" : "none";
+                        }
+                    }
+                </script>
             </head>
             <body>
                 <header>
-                    <img src="../recursos/sentinel_rotado.png" alt="Logo SentinelLinux">
+                    <img src="recursos/sentinel_blanco.png" alt="Logo SentinelLinux">
                     <div>
-                        <h1>SentinelLinux - Reporte de Auditoría de Permisos</h1>
-                        <h2>Auditoría de seguridad según estándares ISO27001 / PCI-DSS</h2>
+                        <h1>SentinelLinux - Reporte de Auditoría</h1>
+                        <h2>Auditoría de seguridad según estándares ISO27001 / CIS</h2>
                     </div>
                 </header>
-                <table>
+                <input type="text" id="searchBox" onkeyup="searchTable()" placeholder="Buscar por archivo, permisos o estado...">
+                <table id="auditTable">
             """
 
-            # primera fila como encabezado
             headers = self.result_list[0]
             html_content += "<tr>" + "".join(f"<th>{h}</th>" for h in headers) + "</tr>"
 
-            # resto de filas
             for row in self.result_list[1:]:
                 archivo = row[0]
                 estado = row[1]
                 detalle = row[2] if len(row) > 2 else ""
 
-                # asignar clase según estado
                 if "Recomended" in estado:
                     estado_class = "secure"
+                    dot_class = "green"
+                    icon = "✔️"
                 elif "Insecure" in estado:
                     estado_class = "insecure"
+                    dot_class = "red"
+                    icon = "⚠️"
                 else:
                     estado_class = "unknown"
+                    dot_class = "orange"
+                    icon = "❓"
 
-                html_content += f"<tr><td>{archivo}</td><td class='{estado_class}'>{estado}</td><td>{detalle}</td></tr>"
+                html_content += f"""
+                <tr>
+                    <td><span class='badge file'>📄 {archivo}</span></td>
+                    <td><span class='badge perm'>{detalle}</span></td>
+                    <td><span class='status-dot {dot_class}'></span><span class='badge {estado_class}'>{icon} {estado}</span></td>
+                </tr>
+                """
 
             html_content += """
                 </table>

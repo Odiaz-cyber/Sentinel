@@ -1,4 +1,4 @@
-lista = ["casa" , "mias"]
+var = "casa"
 
-lista.remove("casa")
-print(lista)
+for i in var:
+    print(i)

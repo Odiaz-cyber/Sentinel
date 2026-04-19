@@ -1,0 +1,7 @@
+Para realizar este escaneo y reporte es necesario saber :
+
+1. Binarios que tienen capabilites
+2. Que capabilites tiene ese Binarios
+3. Si es peligroso que ese binario tenga esa capabilites
+4. Reportar dicha capabilites y el binario y como eliminarla en caso del que usuario asi, 
+lo desee
