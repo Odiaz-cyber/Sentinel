@@ -1,0 +1,8 @@
+/usr/sbin/nologin
+/sbin/nologin
+/bin/false
+rbash 
+/bin/true
+/dev/null
+
+

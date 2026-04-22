@@ -28,7 +28,8 @@ Muy bien, para auditar la seguridad de usuarios y cuentas en Linux conviene estr
 
     id usuario
 
-    Detectar usuarios en grupos críticos (sudo, wheel, adm).
+    Detectar usuarios en grupos críticos (sudo, wheel, adm). (Cuales se concideran grupos criticos y que usuarios
+    deben estar en estos grupos)
 
     Asegurar que los usuarios de servicio no estén en grupos innecesarios.
 
